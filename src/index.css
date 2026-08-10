@@ -1,0 +1,697 @@
+@import "tailwindcss";
+
+:root {
+  /* ── PALETA MODO CLARO (estilo idêntico à imagem) ── */
+
+  /* Marca */
+  --color-primary:        #FF5424;
+  --color-primary-hover:  #E04418;
+  --color-primary-active: #C83910;
+  --color-primary-subtle: #FFF0EB;
+  --color-primary-text:   #FFFFFF;
+
+  /* Fundos */
+  --color-bg-base:     #FAF7F5;   /* página: creme suave com grade */
+  --color-bg-surface:  #FFFFFF;   /* cards: branco puro */
+  --color-bg-elevated: #F5F5F6;   /* elementos internos dos cards */
+  --color-bg-sidebar:  #FFFFFF;   /* sidebar e containers flutuantes */
+
+  /* Bordas */
+  --color-border:        #EAEAEA;
+  --color-border-strong: #D5D5D8;
+
+  /* Sombra dos cards */
+  --shadow-card: 0px 2px 8px rgba(0, 0, 0, 0.04),
+                 0px 1px 2px rgba(0, 0, 0, 0.02);
+
+  /* Texto */
+  --color-text-primary:       #111827;  /* títulos, valores grandes */
+  --color-text-secondary:     #6B7280;  /* labels, textos de apoio */
+  --color-text-disabled:      #9CA3AF;  /* textos auxiliares */
+  --color-text-sidebar-icon:  #9CA3AF;  /* ícones inativos sidebar */
+
+  /* Status */
+  --color-success:    #16A34A;
+  --color-success-bg: #DCFCE7;
+  --color-warning:    #D97706;
+  --color-danger:     #DC2626;
+  --color-danger-bg:  #FEE2E2;
+  --color-info:       #1E69FF;
+
+  /* Glass tokens — claro: sólido */
+  --glass-bg-light:     #FFFFFF;
+  --glass-border-light: #EAEAEA;
+}
+
+:root.dark {
+  /* TEMA ESCURO */
+  --color-bg-base: transparent;
+  --color-bg-surface: rgba(255, 255, 255, 0.05);
+  --color-bg-elevated: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.10);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
+  --color-text-primary: #F5F5F5;
+  --color-text-secondary: #999999;
+  --color-text-disabled: #555555;
+
+  /* GLASS TOKEN — escuro: translúcido com blur */
+  --glass-bg-light: rgba(255, 255, 255, 0.05);
+  --glass-border-light: rgba(255, 255, 255, 0.10);
+}
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-active: var(--color-primary-active);
+  --color-primary-subtle: var(--color-primary-subtle);
+  --color-primary-text: var(--color-primary-text);
+  --color-bg-base: var(--color-bg-base);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-elevated: var(--color-bg-elevated);
+  --color-border-main: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-text-main: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-disabled: var(--color-text-disabled);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-info: var(--color-info);
+  --font-display: "Inter", sans-serif;
+  --radius-DEFAULT: 0.75rem;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-display);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+  }
+}
+
+/* ============================================================
+   SCROLL
+   ============================================================ */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ============================================================
+   MARKDOWN
+   ============================================================ */
+.markdown-body h1 { @apply text-2xl font-bold mt-6 mb-4; }
+.markdown-body h2 { @apply text-xl font-bold mt-5 mb-3; }
+.markdown-body h3 { @apply text-lg font-bold mt-4 mb-2; }
+.markdown-body p { @apply mb-4 leading-relaxed; }
+.markdown-body ul { @apply list-disc pl-6 mb-4; }
+.markdown-body ol { @apply list-decimal pl-6 mb-4; }
+.markdown-body li { @apply mb-1; }
+.markdown-body strong { @apply font-bold; }
+.markdown-body blockquote { @apply border-l-4 border-primary/30 pl-4 italic my-4; }
+
+/* ============================================================
+   GLASS CARD — modo claro: branco com elevação sobre fundo #EEF0F3
+   ============================================================ */
+.glass-card {
+  position: relative;
+  background: var(--color-bg-surface);    /* #FFFFFF */
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-border);   /* #E2E5EA */
+  box-shadow: var(--shadow-card,
+    0px 1px 3px rgba(16, 24, 40, 0.06),
+    0px 1px 2px rgba(16, 24, 40, 0.04));
+  overflow: hidden;
+  transition: box-shadow 0.25s;
+}
+
+.glass-card:hover {
+  box-shadow:
+    0px 4px 12px rgba(16, 24, 40, 0.10),
+    0px 2px 4px rgba(16, 24, 40, 0.06);
+}
+
+/* GLASS CARD — modo escuro: glassmorphism completo */
+:root.dark .glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: none;
+}
+
+:root.dark .glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(156deg,
+      rgba(255,255,255,0.40) 2%,
+      rgba(255,255,255,0.0001) 39%,
+      rgba(255,255,255,0.0001) 54%,
+      rgba(255,255,255,0.12) 93%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+:root.dark .glass-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ============================================================
+   GLASS INPUT — modo claro: campo normal (original)
+   ============================================================ */
+.glass-input {
+  background: transparent;
+  border: 1px solid rgba(224, 224, 224, 0.8);
+  border-radius: 0.75rem;
+  color: var(--color-text-primary);
+  transition: border-color 0.3s, background 0.3s;
+  outline: none;
+}
+
+.glass-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(255, 98, 43, 0.15);
+}
+
+/* GLASS INPUT — modo escuro: glassmorphism */
+:root.dark .glass-input {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+:root.dark .glass-input:focus {
+  border-color: rgba(255, 98, 43, 0.6);
+  background: rgba(255, 98, 43, 0.05);
+}
+
+/* ============================================================
+   GLASS BUTTON
+   ============================================================ */
+.glass-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 3rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.glass-btn:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+:root.dark .glass-btn {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+:root.dark .glass-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(156deg,
+      rgba(255,255,255,0.5) 2%,
+      rgba(255,255,255,0.0001) 40%,
+      rgba(255,255,255,0.12) 93%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-btn-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 3rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-primary);
+  border: 1px solid rgba(224, 224, 224, 0.6);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.glass-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+:root.dark .glass-btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+:root.dark .glass-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+/* ============================================================
+   GLASS MODAL
+   ============================================================ */
+.glass-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+:root.dark .glass-modal-overlay {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.glass-modal-panel {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 2rem;
+  border: 1px solid rgba(224, 224, 224, 0.7);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 32rem;
+  overflow: hidden;
+}
+
+:root.dark .glass-modal-panel {
+  background: rgba(15, 15, 15, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+:root.dark .glass-modal-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(156deg,
+      rgba(255,255,255,0.35) 2%,
+      rgba(255,255,255,0.0001) 40%,
+      rgba(255,255,255,0.0001) 54%,
+      rgba(255,255,255,0.10) 93%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================================
+   PILL GLASSMORPHISM — sidebar e nav (ambos os temas)
+   A pill nav funciona igual nos dois modos
+   ============================================================ */
+.pill-glass {
+  position: relative;
+  border-radius: 4rem;
+  background: rgba(128, 128, 128, 0.20);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.pill-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(156deg,
+      rgba(255,255,255,0.40) 2%,
+      rgba(255,255,255,0.0001) 39%,
+      rgba(255,255,255,0.0001) 54%,
+      rgba(255,255,255,0.12) 93%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.pill-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2rem;
+  padding: 0.75rem;
+  transition: background 0.3s, color 0.3s;
+  color: var(--color-text-secondary);
+}
+
+.pill-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-text-primary);
+}
+
+.pill-btn-active {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2rem;
+  padding: 0.75rem;
+  background: rgba(255, 98, 43, 0.18);
+  color: #FF622B;
+  transition: background 0.3s, color 0.3s;
+}
+
+.pill-btn-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(156deg,
+      rgba(255, 98, 43, 0.7) 2%,
+      rgba(255, 98, 43, 0.05) 50%,
+      rgba(255, 98, 43, 0.3) 93%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================================
+   SEARCH PILL — ambos os temas mantêm o pill
+   ============================================================ */
+.search-pill {
+  position: relative;
+  border-radius: 4rem;
+  background: rgba(128, 128, 128, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.3s;
+}
+
+.search-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(156deg,
+      rgba(255,255,255,0.35) 2%,
+      rgba(255,255,255,0.0001) 40%,
+      rgba(255,255,255,0.0001) 55%,
+      rgba(255,255,255,0.10) 93%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.search-pill:focus-within {
+  background: rgba(255, 98, 43, 0.08);
+}
+
+.search-pill:focus-within::after {
+  background:
+    linear-gradient(156deg,
+      rgba(255, 98, 43, 0.6) 2%,
+      rgba(255, 98, 43, 0.05) 50%,
+      rgba(255, 98, 43, 0.25) 93%
+    ) border-box;
+}
+
+/* ============================================================
+   HEADER — modo claro: branco sólido, borda cinza
+   ============================================================ */
+:root:not(.dark) header {
+  background: var(--color-bg-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* HEADER — modo escuro: glassmorphism escuro */
+:root.dark header {
+  background: rgba(10, 10, 10, 0.50) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ============================================================
+   CARDS GLOBAIS — modo escuro: glassmorphism via seletor
+   Modo claro: usa apenas as classes Tailwind normais
+   ============================================================ */
+:root.dark .rounded-3xl.bg-bg-surface,
+:root.dark .rounded-3xl.bg-bg-elevated {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+:root.dark .rounded-3xl.bg-bg-surface::after,
+:root.dark .rounded-3xl.bg-bg-elevated::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(156deg,
+      rgba(255,255,255,0.30) 2%,
+      rgba(255,255,255,0.0001) 39%,
+      rgba(255,255,255,0.0001) 54%,
+      rgba(255,255,255,0.08) 93%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+:root.dark .rounded-2xl.bg-bg-surface {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+/* MODO CLARO — cards brancos, borda cinza, sombra leve */
+:root:not(.dark) .rounded-3xl.bg-bg-surface,
+:root:not(.dark) .rounded-3xl.bg-bg-elevated {
+  background: var(--color-bg-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ============================================================
+   INPUTS — modo escuro: glass style
+   Modo claro: inputs normais (sem override, usa classes do Tailwind)
+   ============================================================ */
+:root.dark input[type="text"],
+:root.dark input[type="email"],
+:root.dark input[type="password"],
+:root.dark input[type="number"],
+:root.dark input[type="tel"],
+:root.dark input[type="date"],
+:root.dark input[type="time"],
+:root.dark textarea,
+:root.dark select {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 0.875rem !important;
+  color: var(--color-text-primary) !important;
+  transition: border-color 0.3s, background 0.3s !important;
+}
+
+:root.dark input[type="text"]:focus,
+:root.dark input[type="email"]:focus,
+:root.dark input[type="password"]:focus,
+:root.dark input[type="number"]:focus,
+:root.dark input[type="tel"]:focus,
+:root.dark input[type="date"]:focus,
+:root.dark input[type="time"]:focus,
+:root.dark textarea:focus,
+:root.dark select:focus {
+  border-color: rgba(255, 98, 43, 0.55) !important;
+  background: rgba(255, 98, 43, 0.05) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(255, 98, 43, 0.15) !important;
+}
+
+/* ============================================================
+   DROPDOWNS / MENUS — escuro: glassmorphism escuro
+   Claro: fundo branco normal
+   ============================================================ */
+:root.dark .rounded-2xl.shadow-xl.bg-bg-surface,
+:root.dark .rounded-2xl.shadow-xl {
+  background: rgba(12, 12, 12, 0.75) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+:root:not(.dark) .rounded-2xl.shadow-xl.bg-bg-surface,
+:root:not(.dark) .rounded-2xl.shadow-xl {
+  background: var(--color-bg-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10) !important;
+}
+
+/* ============================================================
+   MODAL OVERLAYS
+   ============================================================ */
+:root.dark .fixed.inset-0.bg-black\/50,
+:root.dark .fixed.inset-0.bg-black\/60,
+:root.dark .fixed.inset-0.bg-black\/70 {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* ============================================================
+   PAINÉIS LATERAIS — escuro: glass escuro / claro: branco sólido
+   ============================================================ */
+:root.dark .fixed.inset-y-0.right-0,
+:root.dark .fixed.top-0.right-0 {
+  background: rgba(10, 10, 10, 0.80) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+:root:not(.dark) .fixed.inset-y-0.right-0,
+:root:not(.dark) .fixed.top-0.right-0 {
+  background: var(--color-bg-surface) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-left: 1px solid var(--color-border) !important;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ============================================================
+   SIDEBAR — modo claro: containers flutuantes brancos e badges laranja
+   ============================================================ */
+:root:not(.dark) aside {
+  background: transparent !important;
+  border-right: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+:root:not(.dark) .pill-glass {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #EAEAEA !important;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04) !important;
+  border-radius: 1.25rem !important;
+}
+
+:root:not(.dark) .pill-glass::after {
+  display: none !important;
+}
+
+:root:not(.dark) .pill-btn {
+  color: #9CA3AF !important;
+  border-radius: 0.875rem !important;
+}
+
+:root:not(.dark) .pill-btn:hover {
+  background: #F4F5F7 !important;
+  color: #374151 !important;
+}
+
+:root:not(.dark) .pill-btn-active {
+  background: #FF5424 !important;
+  color: #FFFFFF !important;
+  border-radius: 0.875rem !important;
+  box-shadow: 0px 2px 6px rgba(255, 84, 36, 0.25) !important;
+}
+
+:root:not(.dark) .pill-btn-active::after {
+  display: none !important;
+}
+
+/* ============================================================
+   NAV PILL — modo claro: pílula branca com borda suave
+   ============================================================ */
+:root:not(.dark) nav.pill-glass {
+  background: #FFFFFF !important;
+  border: 1px solid #EAEAEA !important;
+  border-radius: 9999px !important;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* SEARCH PILL — modo claro: campo branco arredondado */
+:root:not(.dark) .search-pill {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #EAEAEA !important;
+  border-radius: 9999px !important;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.03) !important;
+}
+
+:root:not(.dark) .search-pill::after {
+  display: none !important;
+}
+
+:root:not(.dark) .search-pill:focus-within {
+  border-color: #FF5424 !important;
+  box-shadow: 0 0 0 3px rgba(255, 84, 36, 0.12) !important;
+  background: #FFFFFF !important;
+}
