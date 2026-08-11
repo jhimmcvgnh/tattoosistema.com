@@ -162,7 +162,7 @@ export default function App() {
                 <p className="text-sm text-text-secondary hidden sm:block">Fique por dentro das suas tarefas, acompanhe o progresso e verifique o status.</p>
               </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
             <div className="flex flex-col gap-6">
               {/* Total Revenue Card */}
               <div className="glass-card p-6 rounded-3xl border border-border-main shadow-xs">
@@ -280,7 +280,7 @@ export default function App() {
             </div>
 
             {/* Stat Cards Grid */}
-            <div className="grid grid-cols-2 xl:grid-cols-1 gap-3 xl:gap-6 content-start">
+            <div className="grid grid-cols-1 gap-3 lg:gap-6 content-start">
               <StatCard 
                 title="Agendamentos" 
                 amount={appointmentsCount.toString()} 

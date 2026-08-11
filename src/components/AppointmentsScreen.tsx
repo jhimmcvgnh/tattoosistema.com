@@ -92,43 +92,46 @@ export const AppointmentsScreen: React.FC<AppointmentsScreenProps> = ({
   const currentYearMonth = new Date().toISOString().substring(0, 7);
 
   return (
-    <div className="flex flex-col h-full gap-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-text-main">Agendamentos</h2>
-          <p className="text-text-secondary">Gerencie seus horários e clientes</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1 bg-bg-elevated p-1 rounded-xl">
-            {(['kanban', 'calendar', 'list'] as ViewType[]).map(v => (
-              <button 
-                key={v}
-                onClick={() => setView(v)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${view === v ? 'bg-bg-surface text-primary shadow-sm' : 'text-text-secondary hover:text-primary hover:bg-bg-surface'}`}
-              >
-                <span className="material-icons-outlined text-sm">{v === 'kanban' ? 'view_kanban' : v === 'calendar' ? 'calendar_month' : 'table_rows'}</span> 
-                {v.charAt(0).toUpperCase() + v.slice(1)}
-              </button>
-            ))}
+    <div className="flex flex-col h-full gap-4 lg:gap-6">
+      {/* Header */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl lg:text-2xl font-bold text-text-main">Agendamentos</h2>
+            <p className="text-sm text-text-secondary hidden sm:block">Gerencie seus horários e clientes</p>
           </div>
           <button 
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-primary hover:bg-primary-hover text-primary-text px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm shadow-primary/20 text-sm"
+            className="bg-primary hover:bg-primary-hover text-primary-text px-3 py-2 lg:px-4 rounded-xl flex items-center gap-1.5 transition-colors font-medium shadow-sm shadow-primary/20 text-sm"
           >
-            <span className="material-icons-outlined text-sm">add</span> Novo
+            <span className="material-icons-outlined text-sm">add</span>
+            <span>Novo</span>
           </button>
+        </div>
+        {/* View Toggle */}
+        <div className="flex items-center gap-1 bg-bg-elevated p-1 rounded-xl self-start">
+          {(['kanban', 'calendar', 'list'] as ViewType[]).map(v => (
+            <button 
+              key={v}
+              onClick={() => setView(v)}
+              className={`px-3 py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors flex items-center gap-1.5 ${view === v ? 'bg-bg-surface text-primary shadow-sm' : 'text-text-secondary hover:text-primary hover:bg-bg-surface'}`}
+            >
+              <span className="material-icons-outlined text-sm">{v === 'kanban' ? 'view_kanban' : v === 'calendar' ? 'calendar_month' : 'table_rows'}</span> 
+              <span className="hidden sm:inline">{v.charAt(0).toUpperCase() + v.slice(1)}</span>
+            </button>
+          ))}
         </div>
       </div>
 
       <div className="flex-1 min-h-0">
         {view === 'kanban' && (
-          <div className="flex gap-6 overflow-x-auto pb-4 h-full">
+          <div className="flex gap-4 overflow-x-auto pb-4 h-full snap-x snap-mandatory">
             {[
               { id: 'pendente' as AppointmentStatus, title: 'Pendente' },
               { id: 'confirmado' as AppointmentStatus, title: 'Confirmado' },
               { id: 'concluido' as AppointmentStatus, title: 'Concluído' },
             ].map(col => (
-              <div key={col.id} className="flex-1 min-w-[300px] bg-bg-base rounded-2xl p-4 flex flex-col">
+              <div key={col.id} className="flex-1 min-w-[260px] sm:min-w-[300px] bg-bg-base rounded-2xl p-4 flex flex-col snap-start">
                 <h3 className="font-bold text-text-main mb-4 flex items-center justify-between">
                   {col.title}
                   <span className="bg-bg-surface px-2 py-0.5 rounded-full text-xs text-text-secondary">

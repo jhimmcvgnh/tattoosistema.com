@@ -60,16 +60,18 @@ export const InventoryScreen: React.FC = () => {
       <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" />
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-text-main">Estoque & Mercadorias</h2>
-          <p className="text-text-secondary">Gerencie seus equipamentos e produtos</p>
+          <h2 className="text-xl lg:text-2xl font-bold text-text-main">Estoque &amp; Mercadorias</h2>
+          <p className="text-sm text-text-secondary hidden sm:block">Gerencie seus equipamentos e produtos</p>
         </div>
         <button 
           onClick={() => setIsAdding(true)}
-          className="bg-primary hover:bg-primary-hover text-primary-text px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all font-bold shadow-lg shadow-primary/20"
+          className="bg-primary hover:bg-primary-hover text-primary-text px-3 py-2 lg:px-6 lg:py-2.5 rounded-xl flex items-center gap-1.5 transition-all font-bold shadow-lg shadow-primary/20 shrink-0 text-sm"
         >
-          <span className="material-icons-outlined">add_shopping_cart</span> Comprar Mercadoria
+          <span className="material-icons-outlined text-[18px]">add_shopping_cart</span>
+          <span className="hidden sm:inline">Comprar Mercadoria</span>
+          <span className="sm:hidden">Comprar</span>
         </button>
       </div>
 

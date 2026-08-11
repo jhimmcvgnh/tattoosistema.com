@@ -38,18 +38,19 @@ export const NotesScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full gap-6">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col h-full gap-4 lg:gap-6">
+      <div className="flex justify-between items-start gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-text-main">Anotações</h2>
-          <p className="text-text-secondary">Organize suas ideias e tarefas diárias</p>
+          <h2 className="text-xl lg:text-2xl font-bold text-text-main">Anotações</h2>
+          <p className="text-sm text-text-secondary hidden sm:block">Organize suas ideias e tarefas diárias</p>
         </div>
         <button 
           onClick={() => setIsAdding(!isAdding)}
-          className="bg-primary hover:bg-primary-hover text-primary-text px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm shadow-primary/20"
+          className="bg-primary hover:bg-primary-hover text-primary-text px-3 py-2 lg:px-4 rounded-xl flex items-center gap-1.5 transition-colors font-medium shadow-sm shadow-primary/20 shrink-0 text-sm"
         >
-          <span className="material-icons-outlined">{isAdding ? 'close' : 'add'}</span> 
-          {isAdding ? 'Cancelar' : 'Nova Nota'}
+          <span className="material-icons-outlined text-[18px]">{isAdding ? 'close' : 'add'}</span> 
+          <span className="hidden sm:inline">{isAdding ? 'Cancelar' : 'Nova Nota'}</span>
+          <span className="sm:hidden">{isAdding ? 'Fechar' : 'Nova'}</span>
         </button>
       </div>
 
@@ -89,7 +90,7 @@ export const NotesScreen: React.FC = () => {
       )}
 
       {/* Notes Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 overflow-y-auto pt-8 pb-8 hide-scrollbar">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8 overflow-y-auto pt-6 pb-6 hide-scrollbar">
         {notes.map((note, index) => (
           <div 
             key={note.id} 

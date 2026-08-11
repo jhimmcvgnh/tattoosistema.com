@@ -61,33 +61,53 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   ];
 
   return (
-    <div className="flex flex-col h-full gap-6 animate-in fade-in duration-300">
+    <div className="flex flex-col h-full gap-4 lg:gap-6 animate-in fade-in duration-300">
       <div>
-        <h2 className="text-2xl font-bold text-text-main">Configurações</h2>
-        <p className="text-text-secondary">Gerencie suas preferências e contas</p>
+        <h2 className="text-xl lg:text-2xl font-bold text-text-main">Configurações</h2>
+        <p className="text-sm text-text-secondary hidden sm:block">Gerencie suas preferências e contas</p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0">
-        {/* Sidebar Navigation */}
-        <div className="w-full lg:w-64 flex flex-col gap-2 shrink-0">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                activeTab === tab.id 
-                  ? 'bg-primary text-primary-text shadow-md shadow-primary/20' 
-                  : 'text-text-secondary hover:bg-bg-elevated hover:text-text-main hover:shadow-sm'
-              }`}
-            >
-              <span className="material-icons-outlined">{tab.icon}</span>
-              {tab.label}
-            </button>
-          ))}
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1 min-h-0">
+        {/* Navigation — horizontal scroll on mobile, vertical list on desktop */}
+        <div className="lg:w-64 shrink-0">
+          {/* Mobile: horizontal pill tabs */}
+          <div className="flex lg:hidden gap-2 overflow-x-auto pb-1 hide-scrollbar -mx-1 px-1">
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
+                  activeTab === tab.id 
+                    ? 'bg-primary text-primary-text shadow-md shadow-primary/20' 
+                    : 'text-text-secondary bg-bg-elevated hover:bg-bg-surface'
+                }`}
+              >
+                <span className="material-icons-outlined text-[16px]">{tab.icon}</span>
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          {/* Desktop: vertical list */}
+          <div className="hidden lg:flex flex-col gap-2">
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  activeTab === tab.id 
+                    ? 'bg-primary text-primary-text shadow-md shadow-primary/20' 
+                    : 'text-text-secondary hover:bg-bg-elevated hover:text-text-main hover:shadow-sm'
+                }`}
+              >
+                <span className="material-icons-outlined">{tab.icon}</span>
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 bg-bg-surface rounded-3xl p-6 lg:p-8 shadow-sm border border-border-main overflow-y-auto hide-scrollbar">
+        <div className="flex-1 bg-bg-surface rounded-2xl lg:rounded-3xl p-4 lg:p-8 shadow-sm border border-border-main overflow-y-auto hide-scrollbar">
           
           {/* Accounts Tab */}
           {activeTab === 'accounts' && (

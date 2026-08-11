@@ -76,25 +76,25 @@ export const ClientsScreen: React.FC<ClientsScreenProps> = () => {
 
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-300">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-text-main">Clientes</h1>
-        <p className="text-text-secondary">Histórico completo de clientes e valor total gasto.</p>
+      <div className="mb-4 lg:mb-8">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-1 lg:mb-2 text-text-main">Clientes</h1>
+        <p className="text-sm text-text-secondary hidden sm:block">Histórico completo de clientes e valor total gasto.</p>
       </div>
 
-      <div className="bg-bg-surface rounded-3xl p-6 shadow-sm border border-border-main flex-1 flex flex-col">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div className="bg-bg-surface rounded-2xl lg:rounded-3xl p-4 lg:p-6 shadow-sm border border-border-main flex-1 flex flex-col">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 lg:mb-6">
           <div className="relative w-full sm:w-96">
-            <span className="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">search</span>
+            <span className="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-sm">search</span>
             <input 
               type="text" 
-              placeholder="Buscar cliente por nome, email ou telefone..." 
+              placeholder="Buscar cliente..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full pl-9 pr-4 py-2 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-sm"
             />
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <input 
               type="file" 
               accept=".xlsx, .xls" 
@@ -104,22 +104,55 @@ export const ClientsScreen: React.FC<ClientsScreenProps> = () => {
             />
             <button 
               onClick={() => fileInputRef.current?.click()}
-              className="bg-bg-elevated border border-border-main hover:bg-bg-surface text-text-main px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium text-sm shadow-sm"
+              className="bg-bg-elevated border border-border-main hover:bg-bg-surface text-text-main p-2 lg:px-4 lg:py-2 rounded-xl flex items-center gap-2 transition-colors font-medium text-sm shadow-sm"
               title="Importar Excel"
             >
-              <span className="material-icons-outlined text-sm">upload_file</span> Importar
+              <span className="material-icons-outlined text-sm">upload_file</span>
+              <span className="hidden lg:inline">Importar</span>
             </button>
             <button 
               onClick={handleExportExcel}
-              className="bg-primary hover:bg-primary-hover text-primary-text px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm shadow-primary/20 text-sm"
+              className="bg-primary hover:bg-primary-hover text-primary-text p-2 lg:px-4 lg:py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm shadow-primary/20 text-sm"
               title="Exportar Excel"
             >
-              <span className="material-icons-outlined text-sm">download</span> Exportar
+              <span className="material-icons-outlined text-sm">download</span>
+              <span className="hidden lg:inline">Exportar</span>
             </button>
           </div>
         </div>
 
-        <div className="overflow-x-auto flex-1">
+        {/* Mobile: Card List */}
+        <div className="block lg:hidden flex-1 overflow-y-auto divide-y divide-border-main -mx-4 hide-scrollbar">
+          {loading ? (
+            <div className="py-12 text-center text-text-secondary">
+              <span className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin inline-block" />
+            </div>
+          ) : filteredClients.length > 0 ? (
+            filteredClients.map((client, index) => (
+              <div key={client.email || client.phone || index} className="flex items-center gap-3 px-4 py-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                  {client.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-text-main text-sm truncate">{client.name}</p>
+                  <p className="text-xs text-text-secondary truncate">{client.phone}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-sm font-bold text-text-main">R${client.totalSpent.toFixed(0)}</p>
+                  <p className="text-xs text-text-secondary">{client.appointmentCount} agend.</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-12 text-center text-text-secondary px-4">
+              <span className="material-icons-outlined text-4xl mb-2 opacity-30">people</span>
+              <p className="text-sm">Nenhum cliente cadastrado ainda.</p>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop: Table */}
+        <div className="hidden lg:block overflow-x-auto flex-1">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-border-main text-text-secondary text-sm bg-bg-base">

@@ -73,21 +73,23 @@ export const EmployeesScreen: React.FC<EmployeesScreenProps> = ({ appointments: 
   }
 
   return (
-    <div className="flex flex-col h-full gap-6 animate-in fade-in duration-300">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col h-full gap-4 lg:gap-6 animate-in fade-in duration-300">
+      <div className="flex justify-between items-start gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-text-main">Equipe</h2>
-          <p className="text-text-secondary">Gerencie seus funcionários e acompanhe o desempenho</p>
+          <h2 className="text-xl lg:text-2xl font-bold text-text-main">Equipe</h2>
+          <p className="text-sm text-text-secondary hidden sm:block">Gerencie seus funcionários e acompanhe o desempenho</p>
         </div>
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="bg-primary hover:bg-primary-hover text-primary-text px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm shadow-primary/20"
+          className="bg-primary hover:bg-primary-hover text-primary-text px-3 py-2 lg:px-4 rounded-xl flex items-center gap-1.5 transition-colors font-medium shadow-sm shadow-primary/20 shrink-0 text-sm"
         >
-          <span className="material-icons-outlined">person_add</span> Novo Funcionário
+          <span className="material-icons-outlined text-[18px]">person_add</span>
+          <span className="hidden sm:inline">Novo Funcionário</span>
+          <span className="sm:hidden">Novo</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
         {employees.map((employee) => (
           <div key={employee.id} className="bg-bg-surface rounded-3xl p-6 shadow-sm border border-border-main relative overflow-hidden group transition-all hover:shadow-md">
             {employee.id === topPerformerId && employee.revenue > 0 && (
