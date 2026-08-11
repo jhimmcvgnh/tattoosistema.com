@@ -39,21 +39,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   return (
     <>
-      {/* Mobile Overlay */}
-      {isMobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={closeMobileSidebar}
-        />
-      )}
-
+      {/* Sidebar — HIDDEN on mobile, always visible on desktop */}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50 lg:z-10
-          w-20 flex flex-col items-center py-5 px-2 shrink-0
-          transition-transform duration-300 ease-in-out
+          hidden lg:flex
+          lg:static inset-y-0 left-0 z-50 lg:z-10
+          w-20 flex-col items-center py-5 px-2 shrink-0
           border-r border-white/5
-          ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
         style={darkMode ? {
           background: 'rgba(15, 15, 15, 0.55)',

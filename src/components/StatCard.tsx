@@ -64,7 +64,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         </div>
       </div>
       <div>
-        <h3 className={`text-5xl font-extrabold mb-3 tracking-tight ${isPrimary ? 'text-white' : 'text-text-main'}`}>
+        <h3 className={`text-3xl lg:text-5xl font-extrabold mb-3 tracking-tight ${isPrimary ? 'text-white' : 'text-text-main'}`}>
           {amount}
         </h3>
         <div className={`flex items-center gap-2 text-xs font-medium ${isPrimary ? 'text-white/90' : 'text-text-secondary'}`}>

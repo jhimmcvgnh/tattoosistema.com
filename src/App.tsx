@@ -4,6 +4,7 @@ import { Sidebar } from './components/Sidebar';
 import { StatCard } from './components/StatCard';
 import { ActivityTable } from './components/ActivityTable';
 import { type Appointment } from './types/database.types';
+import { MobileBottomNav } from './components/MobileBottomNav';
 
 // Importações pesadas foram movidas para Lazy Loading abaixo
 import { IncomeChart } from './components/IncomeChart';
@@ -136,6 +137,7 @@ export default function App() {
         onOpenReports={() => setIsReportsModalOpen(true)}
         toggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
         handleLogoutProp={handleLogout}
+        activeScreen={activeScreen}
       />
       <div className="flex flex-1 overflow-hidden relative">
           <Sidebar 
@@ -150,14 +152,14 @@ export default function App() {
             closeMobileSidebar={() => setIsMobileSidebarOpen(false)}
             handleLogoutProp={handleLogout}
           />
-          <main className="flex-1 overflow-y-auto p-4 lg:p-10 hide-scrollbar flex flex-col w-full">
+          <main className="flex-1 overflow-y-auto p-4 pb-24 lg:pb-10 lg:p-10 hide-scrollbar flex flex-col w-full">
           {activeScreen === 'dashboard' && (
             <>
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold mb-2 text-text-main">
+              <div className="mb-6 lg:mb-8">
+                <h1 className="text-2xl lg:text-3xl font-bold mb-1 lg:mb-2 text-text-main">
                   Bom dia, {currentUser?.name?.split(' ')[0] || 'Usuário'}
                 </h1>
-                <p className="text-text-secondary">Fique por dentro das suas tarefas, acompanhe o progresso e verifique o status.</p>
+                <p className="text-sm text-text-secondary hidden sm:block">Fique por dentro das suas tarefas, acompanhe o progresso e verifique o status.</p>
               </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -167,7 +169,7 @@ export default function App() {
                 <div className="flex justify-between items-start mb-6">
                   <div>
                     <p className="text-text-secondary mb-1 text-sm font-medium">Total Faturado</p>
-                    <h2 className="text-4xl font-extrabold tracking-tight mb-3 text-text-main">
+                    <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3 text-text-main">
                       R$ {revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </h2>
                     <div className="flex items-center gap-2">
@@ -278,7 +280,7 @@ export default function App() {
             </div>
 
             {/* Stat Cards Grid */}
-            <div className="grid grid-cols-1 gap-4 xl:gap-6 content-start">
+            <div className="grid grid-cols-2 xl:grid-cols-1 gap-3 xl:gap-6 content-start">
               <StatCard 
                 title="Agendamentos" 
                 amount={appointmentsCount.toString()} 
@@ -344,6 +346,14 @@ export default function App() {
         isOpen={isAddAccountModalOpen}
         onClose={() => setIsAddAccountModalOpen(false)}
         onAdd={handleAddAccount}
+      />
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav
+        activeScreen={activeScreen}
+        setActiveScreen={setActiveScreen}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
+        handleLogout={handleLogout}
       />
     </div>
   );

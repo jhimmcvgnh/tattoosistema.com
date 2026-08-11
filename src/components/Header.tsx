@@ -20,7 +20,20 @@ interface HeaderProps {
   onUpdateAvatar: (newAvatarUrl: string) => void;
   onOpenReports: () => void;
   handleLogoutProp: () => void;
+  activeScreen?: string;
 }
+
+const screenTitles: Record<string, string> = {
+  dashboard: 'Dashboard',
+  appointments: 'Agendamentos',
+  chat: 'Chat',
+  finance: 'Financeiro',
+  clients: 'Clientes',
+  inventory: 'Estoque',
+  employees: 'Funcionários',
+  notes: 'Anotações',
+  settings: 'Configurações',
+};
 
 interface SearchResult {
   id: string;
@@ -44,7 +57,8 @@ export const Header: React.FC<HeaderProps> = ({
   onUpdateAvatar,
   onOpenReports,
   toggleSidebar,
-  handleLogoutProp
+  handleLogoutProp,
+  activeScreen = 'dashboard',
 }) => {
   // Account Dropdown State
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -138,15 +152,15 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-20 bg-bg-surface backdrop-blur-xl border-b border-border-main px-4 lg:px-6 py-3 flex items-center justify-between transition-colors duration-200">
+      {/* LEFT — Mobile: logo+título da tela | Desktop: logo+nome */}
       <div className="flex items-center gap-2.5">
-        <button 
-          onClick={toggleSidebar}
-          className="lg:hidden p-2 -ml-2 text-text-secondary hover:bg-bg-elevated rounded-full transition-colors"
-        >
-          <span className="material-icons-outlined">menu</span>
-        </button>
         <div className="w-8 h-8 rounded-full bg-[#FF5424] flex items-center justify-center text-white font-black text-lg shadow-sm">B</div>
-        <span className="font-bold text-xl tracking-tight text-text-main">Barduka</span>
+        {/* Desktop: full brand name */}
+        <span className="hidden lg:block font-bold text-xl tracking-tight text-text-main">Barduka</span>
+        {/* Mobile: active screen title */}
+        <span className="lg:hidden font-bold text-lg tracking-tight text-text-main">
+          {screenTitles[activeScreen] || 'Barduka'}
+        </span>
       </div>
       
       <nav className="hidden xl:flex items-center gap-1 pill-glass px-1.5 py-1">
@@ -213,8 +227,8 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Mobile Search Icon (only visible on small screens) */}
+      <div className="flex items-center gap-2 md:gap-4">
+        {/* Mobile Search Icon */}
         <button className="md:hidden p-2 text-text-secondary hover:bg-bg-elevated rounded-full transition-colors">
           <span className="material-icons-outlined">search</span>
         </button>
@@ -291,14 +305,14 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Profile Dropdown */}
         <div className="relative" ref={profileDropdownRef}>
           <div 
-            className="flex items-center gap-3 pl-4 border-l border-border-main cursor-pointer hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 lg:gap-3 lg:pl-4 lg:border-l lg:border-border-main cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => setIsProfileOpen(!isProfileOpen)}
           >
             <div className="relative group">
               <img 
                 src={currentUser.avatar} 
                 alt="User Avatar" 
-                className="w-10 h-10 rounded-full object-cover border-2 border-transparent group-hover:border-primary transition-all"
+                className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-transparent group-hover:border-primary transition-all"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -317,7 +331,7 @@ export const Header: React.FC<HeaderProps> = ({
               <p className="text-sm font-semibold leading-none mb-1 text-text-main">{currentUser.name}</p>
               <p className="text-xs text-text-secondary leading-none truncate max-w-[120px]">{currentUser.email}</p>
             </div>
-            <span className={`material-icons-outlined text-text-secondary transition-transform ${isProfileOpen ? 'rotate-180' : ''}`}>expand_more</span>
+            <span className={`hidden sm:block material-icons-outlined text-text-secondary transition-transform ${isProfileOpen ? 'rotate-180' : ''}`}>expand_more</span>
           </div>
 
           {/* Profile Dropdown Menu */}
