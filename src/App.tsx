@@ -5,13 +5,16 @@ import { StatCard } from './components/StatCard';
 import { ActivityTable } from './components/ActivityTable';
 import { type Appointment } from './types/database.types';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { PeriodNavigator } from './components/PeriodNavigator';
 
-// Importações pesadas foram movidas para Lazy Loading abaixo
+// Importações pesadas movidas para Lazy Loading
 import { IncomeChart } from './components/IncomeChart';
 import { LoginScreen } from './components/LoginScreen';
 
 import { ReportsModal } from './components/ReportsModal';
 import { AddAccountModal } from './components/AddAccountModal';
+import { AdPopupModal } from './components/AdPopupModal';
+import { useAdPopup } from './hooks/useAdPopup';
 
 function safeLazy<T extends React.ComponentType<any>>(importFn: () => Promise<{ default: T } | any>) {
   return React.lazy(async () => {
@@ -44,7 +47,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { AnimatedBackground } from './components/AnimatedBackground';
 
 import { useAuth } from './hooks/useAuth';
-import { useStats } from './hooks/useStats';
+import { useStats, type PeriodType, type CustomDateRange } from './hooks/useStats';
 import { useAppointments } from './hooks/useAppointments';
 
 export default function App() {
@@ -57,8 +60,14 @@ export default function App() {
   const [isReportsModalOpen, setIsReportsModalOpen] = useState(false);
   const [isAddAccountModalOpen, setIsAddAccountModalOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  const [revenuePeriod, setRevenuePeriod] = useState<'day' | 'week' | 'month' | 'year'>('month');
-  const [customDate, setCustomDate] = useState<string>(new Date().toISOString().split('T')[0]);
+
+  // Hook do Anúncio Pop-up (3 min inicial, 1:30 min recorrente)
+  const { isAdOpen, showNavbarCta, handleClose: handleCloseAd, handleCta: handleCtaAd } = useAdPopup();
+  
+  // Period filtering state
+  const [period, setPeriod] = useState<PeriodType>('month');
+  const [targetDate, setTargetDate] = useState<Date>(new Date());
+  const [customRange, setCustomRange] = useState<CustomDateRange | null>(null);
 
   useEffect(() => {
     if (darkMode) {
@@ -69,7 +78,7 @@ export default function App() {
   }, [darkMode]);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
-  const handleSwitchAccount = (account: Account) => { /* Mock */ };
+  const handleSwitchAccount = (_account: Account) => { /* Mock */ };
   const handleLogout = async () => { 
     await logout();
   };
@@ -95,15 +104,23 @@ export default function App() {
   };
 
   // Dados Reais via Hooks
-  const { appointments, loading: apptsLoading, updateStatus, addAppointment, updateImageLink } = useAppointments();
+  const { appointments, updateStatus, addAppointment, updateImageLink } = useAppointments();
+  
+  // Dynamic Stats Hook calculated with date navigation and comparison
   const { 
     revenue, 
+    revenueGrowth,
+    revenueTrend,
     appointmentsCount, 
+    appointmentsGrowth,
+    appointmentsTrend,
     cancelledCount, 
-    revenueGrowth, 
-    popularServices 
-  } = useStats(revenuePeriod, appointments);
-
+    cancelledGrowth,
+    cancelledTrend,
+    popularServices,
+    periodLabel,
+    comparisonLabel,
+  } = useStats(period, appointments, targetDate, customRange);
 
   const currentUser: Account = {
     id: user?.id ?? '1',
@@ -138,6 +155,7 @@ export default function App() {
         toggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
         handleLogoutProp={handleLogout}
         activeScreen={activeScreen}
+        showProjectCta={showNavbarCta}
       />
       <div className="flex flex-1 overflow-hidden relative">
           <Sidebar 
@@ -155,163 +173,193 @@ export default function App() {
           <main className="flex-1 overflow-y-auto p-4 pb-24 lg:pb-10 lg:p-10 hide-scrollbar flex flex-col w-full">
           {activeScreen === 'dashboard' && (
             <>
-              <div className="mb-6 lg:mb-8">
-                <h1 className="text-2xl lg:text-3xl font-bold mb-1 lg:mb-2 text-text-main">
+              {/* Top Greeting */}
+              <div className="mb-4 lg:mb-6">
+                <h1 className="text-2xl lg:text-3xl font-bold mb-1 text-text-main">
                   Bom dia, {currentUser?.name?.split(' ')[0] || 'Usuário'}
                 </h1>
-                <p className="text-sm text-text-secondary hidden sm:block">Fique por dentro das suas tarefas, acompanhe o progresso e verifique o status.</p>
+                <p className="text-sm text-text-secondary hidden sm:block">
+                  Acompanhe métricas, faturamento e fluxo de agendamentos em tempo real.
+                </p>
               </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
-            <div className="flex flex-col gap-6">
-              {/* Total Revenue Card */}
-              <div className="glass-card p-6 rounded-3xl border border-border-main shadow-xs">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <p className="text-text-secondary mb-1 text-sm font-medium">Total Faturado</p>
-                    <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3 text-text-main">
-                      R$ {revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </h2>
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-[#DCFCE7] text-[#16A34A]">
-                        <span className="material-icons-outlined text-[13px] mr-0.5">arrow_upward</span> 
-                        {revenueGrowth || 0}%
-                      </span>
-                      <span className="text-xs text-text-secondary font-medium">
-                        comparado ao período anterior
-                      </span>
+              {/* Master Period Filter Toolbar */}
+              <PeriodNavigator 
+                period={period}
+                onPeriodChange={setPeriod}
+                targetDate={targetDate}
+                onTargetDateChange={setTargetDate}
+                customRange={customRange}
+                onCustomRangeChange={setCustomRange}
+                periodLabel={periodLabel}
+                totalAppointments={appointmentsCount}
+                totalRevenue={revenue}
+              />
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
+                <div className="flex flex-col gap-6">
+                  {/* Total Revenue Card */}
+                  <div className="glass-card p-6 rounded-3xl border border-border-main shadow-xs relative overflow-hidden group">
+                    <div className="flex justify-between items-start mb-6">
+                      <div>
+                        <p className="text-text-secondary mb-1 text-sm font-medium">Total Faturado</p>
+                        <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3 text-text-main">
+                          R$ {revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </h2>
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
+                            revenueTrend === 'up' 
+                              ? 'bg-[#DCFCE7] text-[#16A34A] dark:bg-emerald-950/60 dark:text-emerald-400' 
+                              : 'bg-[#FEE2E2] text-[#DC2626] dark:bg-rose-950/60 dark:text-rose-400'
+                          }`}>
+                            <span className="material-icons-outlined text-[13px] mr-0.5">
+                              {revenueTrend === 'up' ? 'arrow_upward' : 'arrow_downward'}
+                            </span> 
+                            {Math.abs(revenueGrowth)}%
+                          </span>
+                          <span className="text-xs text-text-secondary font-medium">
+                            {comparisonLabel}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-2.5 bg-bg-elevated border border-border-main rounded-2xl text-text-secondary group-hover:text-primary transition-colors">
+                        <span className="material-icons-outlined text-xl">
+                          payments
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Period Selector Buttons */}
+                    <div className="bg-bg-elevated p-1 rounded-xl flex items-center justify-between mb-1 border border-border-main">
+                      {[
+                        { label: 'Dia', value: 'day' },
+                        { label: 'Semana', value: 'week' },
+                        { label: 'Mês', value: 'month' },
+                        { label: 'Ano', value: 'year' },
+                      ].map((item) => {
+                         const isActive = period === item.value;
+                         return (
+                           <button
+                             key={item.value}
+                             onClick={() => setPeriod(item.value as PeriodType)}
+                             className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                               isActive 
+                                 ? 'bg-bg-surface shadow-xs text-primary font-bold border border-border-main scale-[1.02]' 
+                                 : 'text-text-secondary hover:text-text-main hover:bg-bg-surface/50'
+                             }`}
+                           >
+                             {item.label}
+                           </button>
+                         )
+                       })}
                     </div>
                   </div>
-                  <div className="p-2 bg-bg-elevated border border-border-main rounded-xl">
-                    <span className="material-icons-outlined text-text-secondary text-xl">
-                      grid_view
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Period Selectors */}
-                <div className="bg-bg-elevated p-1 rounded-xl flex items-center justify-between mb-2 border border-border-main">
-                  {['Dia', 'Semana', 'Mês', 'Ano'].map((period) => {
-                     const value = period === 'Dia' ? 'day' : period === 'Semana' ? 'week' : period === 'Mês' ? 'month' : 'year';
-                     const isActive = revenuePeriod === value;
-                     return (
-                       <button
-                         key={value}
-                         onClick={() => setRevenuePeriod(value as any)}
-                         className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${
-                           isActive 
-                             ? 'bg-bg-surface shadow-xs text-[#FF5424] font-semibold border border-border-main' 
-                             : 'text-text-secondary hover:text-text-main hover:bg-bg-surface/50'
-                         }`}
-                       >
-                         {period}
-                       </button>
-                     )
-                   })}
-                </div>
 
-                {/* Date Picker Input (Visible only when 'day' is selected) */}
-                {revenuePeriod === 'day' && (
-                  <div className="mt-2 animate-in fade-in slide-in-from-top-2">
-                    <input 
-                      type="date" 
-                      className="w-full bg-bg-base border border-border-main rounded-xl px-4 py-2 text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all cursor-pointer"
-                      value={customDate}
-                      onChange={(e) => setCustomDate(e.target.value)}
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Popular Services */}
-              <div className="glass-card p-6 flex-1 flex flex-col">
-                 <div className="flex justify-between items-center mb-2">
-                    <h3 className="font-semibold text-text-main">Serviços Mais Populares</h3>
-                    <button className="text-xs text-[#FF5424] font-medium hover:underline">Ver todos</button>
-                 </div>
-                 <div className="flex-1 min-h-[250px] w-full relative">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={
-                            popularServices.length > 0 
-                              ? popularServices.map((item: any, idx: number) => ({
-                                  ...item,
-                                  color: ['#FF8C66', '#C83E14', '#FFE2D9', '#FF5424'][idx % 4]
-                                }))
-                              : [{ name: 'Sem agendamentos', value: 1, color: '#374151' }]
-                          }
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={3}
-                          dataKey="value"
-                        >
-                          {(popularServices.length > 0 ? popularServices : [{ color: '#374151' }]).map((entry: any, index: number) => (
-                            <Cell 
-                              key={`cell-${index}`} 
-                              fill={popularServices.length > 0 ? ['#FF8C66', '#C83E14', '#FFE2D9', '#FF5424'][index % 4] : '#374151'} 
-                              stroke="none" 
+                  {/* Popular Services */}
+                  <div className="glass-card p-6 flex-1 flex flex-col rounded-3xl border border-border-main shadow-xs">
+                     <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-semibold text-text-main">Serviços Mais Populares</h3>
+                        <span className="text-xs text-text-secondary font-medium">{periodLabel}</span>
+                     </div>
+                     <div className="flex-1 min-h-[250px] w-full relative">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={
+                                popularServices.length > 0 
+                                  ? popularServices.map((item: any, idx: number) => ({
+                                      ...item,
+                                      color: ['#FF5424', '#FF8C5A', '#E04418', '#FFE0D4', '#CC3B11'][idx % 5]
+                                    }))
+                                  : [{ name: 'Sem agendamentos no período', value: 1, color: '#374151' }]
+                              }
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={80}
+                              paddingAngle={popularServices.length > 0 ? 3 : 0}
+                              dataKey="value"
+                            >
+                              {(popularServices.length > 0 ? popularServices : [{ color: '#374151' }]).map((_entry: any, index: number) => (
+                                <Cell 
+                                  key={`cell-${index}`} 
+                                  fill={popularServices.length > 0 ? ['#FF5424', '#FF8C5A', '#E04418', '#FFE0D4', '#CC3B11'][index % 5] : '#374151'} 
+                                  stroke="none" 
+                                />
+                              ))}
+                            </Pie>
+                            <Tooltip 
+                              contentStyle={{ 
+                                backgroundColor: 'var(--color-bg-surface)', 
+                                borderColor: 'var(--color-border-main)', 
+                                borderRadius: '12px',
+                                color: 'var(--color-text-main)'
+                              }}
+                              itemStyle={{ color: 'var(--color-text-main)' }}
                             />
-                          ))}
-                        </Pie>
-                        <Tooltip 
-                          contentStyle={{ backgroundColor: 'var(--color-bg-surface)', borderColor: 'var(--color-border)', borderRadius: '8px' }}
-                          itemStyle={{ color: 'var(--color-text-primary)' }}
-                        />
-                        <Legend 
-                          verticalAlign="bottom" 
-                          align="center"
-                          iconType="circle"
-                          formatter={(value) => (
-                              <span className="text-text-main ml-2 text-xs font-medium">{value}</span>
-                          )}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    {/* Center Text */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
-                       <span className="text-3xl font-bold text-text-main">{appointmentsCount}</span>
-                       <span className="text-xs text-text-secondary">Total</span>
-                    </div>
-                 </div>
+                            <Legend 
+                              verticalAlign="bottom" 
+                              align="center"
+                              iconType="circle"
+                              formatter={(value) => (
+                                  <span className="text-text-main ml-1.5 text-xs font-medium">{value}</span>
+                              )}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                        {/* Center Text */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
+                           <span className="text-3xl font-extrabold text-text-main">{appointmentsCount}</span>
+                           <span className="text-xs text-text-secondary font-medium">Total</span>
+                        </div>
+                     </div>
+                  </div>
+                </div>
+
+                {/* Stat Cards Grid */}
+                <div className="grid grid-cols-1 gap-3 lg:gap-6 content-start">
+                  <StatCard 
+                    title="Agendamentos" 
+                    amount={appointmentsCount.toString()} 
+                    percentage={`${Math.abs(appointmentsGrowth)}%`} 
+                    trend={appointmentsTrend} 
+                    icon="calendar_today" 
+                    isPrimary={true} 
+                    period={period}
+                    onPeriodChange={(newPeriod) => setPeriod(newPeriod)}
+                    comparisonLabel={comparisonLabel}
+                  />
+                  <StatCard 
+                    title="Cancelamentos" 
+                    amount={cancelledCount.toString()} 
+                    percentage={`${Math.abs(cancelledGrowth)}%`} 
+                    trend={cancelledTrend} 
+                    icon="event_busy" 
+                    isPrimary={false}
+                    period={period}
+                    onPeriodChange={(newPeriod) => setPeriod(newPeriod)}
+                    comparisonLabel={comparisonLabel}
+                  />
+                </div>
+
+                {/* Chart Adaptable to Period */}
+                <IncomeChart 
+                  appointments={appointments} 
+                  period={period}
+                  targetDate={targetDate}
+                  customRange={customRange}
+                />
               </div>
-            </div>
 
-            {/* Stat Cards Grid */}
-            <div className="grid grid-cols-1 gap-3 lg:gap-6 content-start">
-              <StatCard 
-                title="Agendamentos" 
-                amount={appointmentsCount.toString()} 
-                percentage={`${revenueGrowth || 0}%`} 
-                trend="up" 
-                icon="calendar_today" 
-                isPrimary={true} 
-                period={revenuePeriod === 'day' ? 'month' : revenuePeriod as any}
-                onPeriodChange={() => {}}
-              />
-              <StatCard 
-                title="Cancelamentos" 
-                amount={cancelledCount.toString()} 
-                percentage="0%" 
-                trend="down" 
-                icon="event_busy" 
-                isPrimary={true}
-                period={revenuePeriod === 'day' ? 'month' : revenuePeriod as any}
-                onPeriodChange={() => {}}
-              />
-            </div>
-
-            {/* Chart */}
-            <IncomeChart appointments={appointments} />
-          </div>
-
-          <div className="mt-6">
-            {/* Activity Table */}
-            <ActivityTable appointments={appointments} updateStatus={updateStatus} updateImageLink={updateImageLink} />
-          </div>
-          </>
+              <div className="mt-6">
+                {/* Activity Table */}
+                <ActivityTable 
+                  appointments={appointments} 
+                  updateStatus={updateStatus} 
+                  updateImageLink={updateImageLink} 
+                />
+              </div>
+            </>
           )}
 
           <React.Suspense fallback={<div className="flex-1 flex items-center justify-center text-primary"><span className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></span></div>}>
@@ -346,6 +394,11 @@ export default function App() {
         isOpen={isAddAccountModalOpen}
         onClose={() => setIsAddAccountModalOpen(false)}
         onAdd={handleAddAccount}
+      />
+      <AdPopupModal
+        isOpen={isAdOpen}
+        onClose={handleCloseAd}
+        onCtaClick={handleCtaAd}
       />
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav

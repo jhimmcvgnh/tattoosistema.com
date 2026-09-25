@@ -21,6 +21,7 @@ interface HeaderProps {
   onOpenReports: () => void;
   handleLogoutProp: () => void;
   activeScreen?: string;
+  showProjectCta?: boolean;
 }
 
 const screenTitles: Record<string, string> = {
@@ -59,6 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
   toggleSidebar,
   handleLogoutProp,
   activeScreen = 'dashboard',
+  showProjectCta = false,
 }) => {
   // Account Dropdown State
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -227,7 +229,31 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
+      {/* Botão CTA que surge ao lado da barra de pesquisa */}
+      {showProjectCta && (
+        <a
+          href="https://jimdevtattooquizz-com.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden md:inline-flex items-center justify-center px-5 py-2 text-sm font-semibold rounded-full transition-all bg-[#00E575] hover:bg-[#00c966] text-black shadow-xs cursor-pointer shrink-0 animate-in fade-in zoom-in-95 duration-200"
+        >
+          quero meu projeto completo
+        </a>
+      )}
+
       <div className="flex items-center gap-2 md:gap-4">
+        {/* Versão mobile do botão CTA */}
+        {showProjectCta && (
+          <a
+            href="https://jimdevtattooquizz-com.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="md:hidden inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold rounded-full bg-[#00E575] hover:bg-[#00c966] text-black shadow-xs cursor-pointer shrink-0 animate-in fade-in duration-200"
+          >
+            quero meu projeto completo
+          </a>
+        )}
+
         {/* Mobile Search Icon */}
         <button className="md:hidden p-2 text-text-secondary hover:bg-bg-elevated rounded-full transition-colors">
           <span className="material-icons-outlined">search</span>
