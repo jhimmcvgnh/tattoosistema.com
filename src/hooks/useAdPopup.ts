@@ -1,17 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-const INITIAL_DELAY_MS = 3 * 60 * 1000; // 3 minutos para a primeira exibição
-const RECURRING_DELAY_MS = 90 * 1000;    // 1:30 minutos para as próximas exibições
+const INITIAL_DELAY_MS = 55 * 1000; // 55 segundos para a primeira exibição
+const RECURRING_DELAY_MS = 55 * 1000; // 55 segundos para as próximas exibições
 
 export function useAdPopup() {
   const [isAdOpen, setIsAdOpen] = useState(false);
-  const [showNavbarCta, setShowNavbarCta] = useState(() => {
-    try {
-      return sessionStorage.getItem('ad_navbar_cta_unlocked') === 'true';
-    } catch {
-      return false;
-    }
-  });
+  // Sempre começa como falso ao entrar ou recarregar a página
+  const [showNavbarCta, setShowNavbarCta] = useState(false);
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -25,7 +20,14 @@ export function useAdPopup() {
   }, []);
 
   useEffect(() => {
-    // Ao carregar o site, não aparece imediatamente: aguarda os 3 minutos
+    // Limpa qualquer dado residual de storage para garantir estado inicial limpo
+    try {
+      sessionStorage.removeItem('ad_navbar_cta_unlocked');
+    } catch {
+      // Ignora erro de storage
+    }
+
+    // Ao carregar o site, não aparece imediatamente: aguarda os 55 segundos
     scheduleNextPopup(INITIAL_DELAY_MS);
 
     // Atalho global para teste e validação imediata no console se necessário
@@ -43,13 +45,9 @@ export function useAdPopup() {
 
   const handleClose = useCallback(() => {
     setIsAdOpen(false);
+    // Somente após o usuário fechar o anúncio no X os elementos pós-anúncio aparecem
     setShowNavbarCta(true);
-    try {
-      sessionStorage.setItem('ad_navbar_cta_unlocked', 'true');
-    } catch {
-      // Ignora erro de storage
-    }
-    // Após fechar no X, programa para reaparecer a cada 1:30 minutos (90s)
+    // Agenda para reaparecer a cada 55 segundos
     scheduleNextPopup(RECURRING_DELAY_MS);
   }, [scheduleNextPopup]);
 
@@ -57,11 +55,6 @@ export function useAdPopup() {
     window.open('https://jimdevtattooquizz-com.vercel.app', '_blank', 'noopener,noreferrer');
     setIsAdOpen(false);
     setShowNavbarCta(true);
-    try {
-      sessionStorage.setItem('ad_navbar_cta_unlocked', 'true');
-    } catch {
-      // Ignora erro de storage
-    }
     scheduleNextPopup(RECURRING_DELAY_MS);
   }, [scheduleNextPopup]);
 

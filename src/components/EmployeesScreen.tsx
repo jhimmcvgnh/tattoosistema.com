@@ -89,9 +89,9 @@ export const EmployeesScreen: React.FC<EmployeesScreenProps> = ({ appointments: 
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-6">
         {employees.map((employee) => (
-          <div key={employee.id} className="bg-bg-surface rounded-3xl p-6 shadow-sm border border-border-main relative overflow-hidden group transition-all hover:shadow-md">
+          <div key={employee.id} className="bg-bg-surface rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs border border-border-main relative overflow-hidden group transition-all hover:shadow-md">
             {employee.id === topPerformerId && employee.revenue > 0 && (
               <div className="absolute top-0 right-0 bg-primary text-primary-text text-[10px] font-bold px-3 py-1 rounded-bl-xl flex items-center gap-1 shadow-sm">
                 <span className="material-icons-outlined text-sm">emoji_events</span> Destaque do Mês

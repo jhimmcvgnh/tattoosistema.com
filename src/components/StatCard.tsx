@@ -34,7 +34,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <div
-      className={`glass-card p-6 flex flex-col justify-between rounded-3xl transition-all duration-300 relative overflow-hidden group ${
+      className={`glass-card p-4 sm:p-6 flex flex-col justify-between rounded-2xl sm:rounded-3xl transition-all duration-300 relative overflow-hidden group ${
         isPrimary 
           ? 'bg-gradient-to-br from-[#FF5424] to-[#E04418] text-white border-none shadow-lg shadow-[#FF5424]/15' 
           : 'bg-bg-surface text-text-main border border-border-main shadow-xs hover:border-primary/40'

@@ -65,38 +65,38 @@ export const FinanceScreen: React.FC<FinanceScreenProps> = () => {
   };
    return (
     <div className="flex flex-col h-full gap-4 lg:gap-6">
-       {/* Summary Cards - horizontal scroll on mobile */}
-       <div className="flex lg:grid lg:grid-cols-3 gap-3 lg:gap-6 overflow-x-auto pb-1 lg:pb-0 snap-x snap-mandatory -mx-4 px-4 lg:mx-0 lg:px-0">
+       {/* Summary Cards */}
+       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-6">
           {/* Income Card */}
-          <div className="bg-bg-surface p-4 lg:p-6 rounded-2xl lg:rounded-3xl shadow-sm border border-border-main flex items-center gap-3 lg:gap-4 transition-colors duration-200 shrink-0 w-64 lg:w-auto snap-start">
+          <div className="bg-bg-surface p-4 lg:p-6 rounded-2xl lg:rounded-3xl shadow-xs border border-border-main flex items-center gap-3 lg:gap-4 transition-colors duration-200">
             <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-success/10 flex items-center justify-center text-success shrink-0">
-               <span className="material-icons-outlined">arrow_downward</span>
+               <span className="material-icons-outlined text-lg sm:text-xl">arrow_downward</span>
             </div>
             <div>
                <p className="text-text-secondary text-xs lg:text-sm">Entradas</p>
-               <h3 className="text-lg lg:text-2xl font-bold text-text-main">R$ {totalIncome.toFixed(2)}</h3>
+               <h3 className="text-xl lg:text-2xl font-bold text-text-main">R$ {totalIncome.toFixed(2)}</h3>
             </div>
           </div>
 
           {/* Expense Card */}
-          <div className="bg-bg-surface p-4 lg:p-6 rounded-2xl lg:rounded-3xl shadow-sm border border-border-main flex items-center gap-3 lg:gap-4 transition-colors duration-200 shrink-0 w-64 lg:w-auto snap-start">
+          <div className="bg-bg-surface p-4 lg:p-6 rounded-2xl lg:rounded-3xl shadow-xs border border-border-main flex items-center gap-3 lg:gap-4 transition-colors duration-200">
             <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-danger/10 flex items-center justify-center text-danger shrink-0">
-               <span className="material-icons-outlined">arrow_upward</span>
+               <span className="material-icons-outlined text-lg sm:text-xl">arrow_upward</span>
             </div>
             <div>
                <p className="text-text-secondary text-xs lg:text-sm">Saídas</p>
-               <h3 className="text-lg lg:text-2xl font-bold text-text-main">R$ {totalExpense.toFixed(2)}</h3>
+               <h3 className="text-xl lg:text-2xl font-bold text-text-main">R$ {totalExpense.toFixed(2)}</h3>
             </div>
           </div>
 
           {/* Balance Card */}
-          <div className="bg-bg-surface p-4 lg:p-6 rounded-2xl lg:rounded-3xl shadow-sm border border-border-main flex items-center gap-3 lg:gap-4 transition-colors duration-200 shrink-0 w-64 lg:w-auto snap-start">
-            <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center shrink-0 ${balance >= 0 ? 'bg-info/10 text-info' : 'bg-primary-subtle text-primary'}`}>
-               <span className="material-icons-outlined">account_balance_wallet</span>
+          <div className="bg-bg-surface p-4 lg:p-6 rounded-2xl lg:rounded-3xl shadow-xs border border-border-main flex items-center gap-3 lg:gap-4 transition-colors duration-200">
+            <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center shrink-0 ${balance >= 0 ? 'bg-info/10 text-info' : 'bg-primary/10 text-primary'}`}>
+               <span className="material-icons-outlined text-lg sm:text-xl">account_balance_wallet</span>
             </div>
             <div>
                <p className="text-text-secondary text-xs lg:text-sm">Saldo Atual</p>
-               <h3 className={`text-lg lg:text-2xl font-bold ${balance >= 0 ? 'text-info' : 'text-primary'}`}>R$ {balance.toFixed(2)}</h3>
+               <h3 className={`text-xl lg:text-2xl font-bold ${balance >= 0 ? 'text-info' : 'text-primary'}`}>R$ {balance.toFixed(2)}</h3>
             </div>
           </div>
        </div>
@@ -174,10 +174,10 @@ export const FinanceScreen: React.FC<FinanceScreenProps> = () => {
 
        {/* Add Transaction Modal */}
        {showAddModal && (
-         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-           <div className="bg-bg-surface rounded-3xl p-6 w-full max-w-md shadow-xl border border-border-main animate-in fade-in zoom-in duration-200">
-             <h3 className="text-xl font-bold text-text-main mb-4">Nova Transação</h3>
-             <form onSubmit={handleAddTransaction} className="flex flex-col gap-4">
+         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-3 sm:p-4 backdrop-blur-sm overflow-y-auto">
+           <div className="bg-bg-surface rounded-2xl sm:rounded-3xl p-5 sm:p-6 w-full max-w-md shadow-2xl border border-border-main animate-in fade-in zoom-in duration-200 my-auto max-h-[92dvh] overflow-y-auto">
+             <h3 className="text-lg sm:text-xl font-bold text-text-main mb-4">Nova Transação</h3>
+             <form onSubmit={handleAddTransaction} className="flex flex-col gap-3.5 sm:gap-4">
                
                {/* Type Selection */}
                <div className="flex gap-2 p-1 bg-bg-base rounded-xl">

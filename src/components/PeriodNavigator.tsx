@@ -232,10 +232,10 @@ export const PeriodNavigator: React.FC<PeriodNavigatorProps> = ({
 
       {/* Date Picker Dropdown Popover */}
       {showDatePicker && (
-        <div className="w-full mt-3 pt-3 border-t border-border-main flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2">
+        <div className="w-full mt-3 pt-3 border-t border-border-main flex flex-col items-start justify-between gap-3 animate-in fade-in slide-in-from-top-2">
           {period === 'day' ? (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
-              <span className="text-xs font-semibold text-text-secondary flex items-center gap-1">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
+              <span className="text-xs font-semibold text-text-secondary flex items-center gap-1.5 shrink-0">
                 <CalendarDays className="w-4 h-4 text-primary" /> Escolher dia específico:
               </span>
               <input
@@ -247,48 +247,48 @@ export const PeriodNavigator: React.FC<PeriodNavigatorProps> = ({
                     onTargetDateChange(new Date(y, m - 1, d));
                   }
                 }}
-                className="bg-bg-base border border-border-main rounded-xl px-3 py-1.5 text-xs lg:text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
+                className="bg-bg-base border border-border-main rounded-xl px-3 py-2 text-base sm:text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer w-full sm:w-auto"
               />
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => onTargetDateChange(new Date())}
-                  className="px-2.5 py-1 text-xs bg-bg-elevated hover:bg-bg-surface border border-border-main rounded-lg text-text-main cursor-pointer"
+                  className="flex-1 sm:flex-none px-3 py-2 text-xs font-semibold bg-bg-elevated hover:bg-bg-surface border border-border-main rounded-xl text-text-main cursor-pointer"
                 >
                   Hoje
                 </button>
                 <button
                   onClick={() => onTargetDateChange(subDays(new Date(), 1))}
-                  className="px-2.5 py-1 text-xs bg-bg-elevated hover:bg-bg-surface border border-border-main rounded-lg text-text-main cursor-pointer"
+                  className="flex-1 sm:flex-none px-3 py-2 text-xs font-semibold bg-bg-elevated hover:bg-bg-surface border border-border-main rounded-xl text-text-main cursor-pointer"
                 >
                   Ontem
                 </button>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleApplyCustomRange} className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
-              <span className="text-xs font-semibold text-text-secondary flex items-center gap-1">
+            <form onSubmit={handleApplyCustomRange} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
+              <span className="text-xs font-semibold text-text-secondary flex items-center gap-1.5 shrink-0">
                 <CalendarDays className="w-4 h-4 text-primary" /> Intervalo personalizado:
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
                 <input
                   type="date"
                   value={tempStartDate}
                   onChange={(e) => setTempStartDate(e.target.value)}
-                  className="bg-bg-base border border-border-main rounded-xl px-3 py-1.5 text-xs text-text-main focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
+                  className="flex-1 sm:flex-none bg-bg-base border border-border-main rounded-xl px-3 py-2 text-base sm:text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
                   required
                 />
-                <span className="text-text-secondary text-xs">até</span>
+                <span className="text-text-secondary text-xs shrink-0">até</span>
                 <input
                   type="date"
                   value={tempEndDate}
                   onChange={(e) => setTempEndDate(e.target.value)}
-                  className="bg-bg-base border border-border-main rounded-xl px-3 py-1.5 text-xs text-text-main focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
+                  className="flex-1 sm:flex-none bg-bg-base border border-border-main rounded-xl px-3 py-2 text-base sm:text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="px-4 py-1.5 text-xs font-semibold bg-primary text-white rounded-xl hover:bg-primary-hover shadow-xs transition-colors cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2 text-xs font-semibold bg-primary text-white rounded-xl hover:bg-primary-hover shadow-xs transition-colors cursor-pointer"
               >
                 Aplicar Intervalo
               </button>

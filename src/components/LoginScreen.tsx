@@ -39,11 +39,11 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <main className="relative w-screen h-screen bg-black font-display overflow-hidden">
+    <main className="relative w-full max-w-full min-h-screen min-h-[100dvh] bg-black font-display overflow-x-hidden">
       <NeuralNoise color={[1.0, 0.384, 0.169]} opacity={0.8} speed={0.001} />
 
-      <div className="relative z-10 flex items-center justify-center w-full h-full p-4 pointer-events-none">
-        <div className="w-full max-w-md p-8 space-y-5 bg-zinc-950/80 backdrop-blur-xl rounded-2xl border border-white/15 shadow-2xl pointer-events-auto">
+      <div className="relative z-10 flex items-center justify-center w-full min-h-screen min-h-[100dvh] p-4 sm:p-6 pointer-events-none">
+        <div className="w-full max-w-md p-6 sm:p-8 space-y-5 bg-zinc-950/85 backdrop-blur-xl rounded-2xl border border-white/15 shadow-2xl pointer-events-auto">
 
           {/* Header */}
           <div className="text-center mb-2">
@@ -88,7 +88,7 @@ export const LoginScreen: React.FC = () => {
                 id="input_email"
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); setError(''); }}
-                className="w-full px-4 py-3 bg-black/40 hover:bg-black/50 focus:bg-black/60 text-white placeholder-gray-500 text-sm rounded-xl border border-white/15 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                className="w-full px-4 py-3 bg-black/40 hover:bg-black/50 focus:bg-black/60 text-white placeholder-gray-500 text-base rounded-xl border border-white/15 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 placeholder="seu.email@exemplo.com"
                 required
                 autoComplete="email"
@@ -112,7 +112,7 @@ export const LoginScreen: React.FC = () => {
                   id="input_password"
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                  className="w-full pl-4 pr-11 py-3 bg-black/40 hover:bg-black/50 focus:bg-black/60 text-white placeholder-gray-500 text-sm rounded-xl border border-white/15 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full pl-4 pr-11 py-3 bg-black/40 hover:bg-black/50 focus:bg-black/60 text-white placeholder-gray-500 text-base rounded-xl border border-white/15 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"

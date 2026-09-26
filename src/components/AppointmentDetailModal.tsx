@@ -118,30 +118,30 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
   const imageUrl = allImages[selectedImgIndex] || allImages[0] || inputImageUrl;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
-      <div className="bg-bg-surface w-full max-w-3xl rounded-3xl shadow-2xl border border-border-main overflow-hidden my-auto max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+      <div className="bg-bg-surface w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl border border-border-main overflow-hidden my-auto max-h-[92dvh] flex flex-col animate-in zoom-in-95 duration-200">
         
         {/* Header do Modal */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-border-main bg-bg-base/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-              <span className="material-icons-outlined">collections</span>
+        <div className="flex justify-between items-center px-4 sm:px-6 py-3.5 sm:py-4 border-b border-border-main bg-bg-base/50">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <span className="material-icons-outlined text-lg sm:text-xl">collections</span>
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-text-main">Detalhes & Imagem do Agendamento</h2>
-              <p className="text-xs text-text-secondary">ID: {appointment.id}</p>
+            <div className="min-w-0">
+              <h2 className="text-base sm:text-lg font-bold text-text-main truncate">Detalhes do Agendamento</h2>
+              <p className="text-[10px] sm:text-xs text-text-secondary truncate">ID: {appointment.id}</p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-bg-elevated text-text-secondary hover:text-text-main flex items-center justify-center transition-colors"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-bg-elevated text-text-secondary hover:text-text-main flex items-center justify-center transition-colors p-1"
           >
-            <span className="material-icons-outlined text-lg">close</span>
+            <span className="material-icons-outlined text-base sm:text-lg">close</span>
           </button>
         </div>
 
         {/* Conteúdo Principal */}
-        <div className="p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
           
           {/* Lado Esquerdo / Imagem Adaptável */}
           <div className={`md:col-span-6 flex flex-col gap-3 ${imgOrientation === 'portrait' ? 'max-w-md mx-auto w-full' : ''}`}>
@@ -222,7 +222,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
                     value={inputImageUrl}
                     onChange={e => setInputImageUrl(e.target.value)}
                     placeholder="https://exemplo.com/imagem.jpg"
-                    className="flex-1 p-2 text-xs bg-bg-surface border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+                    className="flex-1 p-2 text-base sm:text-xs bg-bg-surface border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
                   />
                   <button 
                     onClick={handleSaveImageLink}

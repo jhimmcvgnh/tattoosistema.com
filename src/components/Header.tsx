@@ -75,6 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   // Search State
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -153,130 +154,170 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-20 bg-bg-surface backdrop-blur-xl border-b border-border-main px-4 lg:px-6 py-3 flex items-center justify-between transition-colors duration-200">
-      {/* LEFT — Mobile: logo+título da tela | Desktop: logo+nome */}
-      <div className="flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-full bg-[#FF5424] flex items-center justify-center text-white font-black text-lg shadow-sm">B</div>
-        {/* Desktop: full brand name */}
-        <span className="hidden lg:block font-bold text-xl tracking-tight text-text-main">Barduka</span>
-        {/* Mobile: active screen title */}
-        <span className="lg:hidden font-bold text-lg tracking-tight text-text-main">
-          {screenTitles[activeScreen] || 'Barduka'}
-        </span>
-      </div>
-      
-      <nav className="hidden xl:flex items-center gap-1 pill-glass px-1.5 py-1">
-        <button
-          className="px-5 py-2 text-sm font-semibold rounded-full transition-all bg-[#FF5424] text-white shadow-xs"
-        >
-          Visão Geral
-        </button>
-        <button className="pill-btn px-4 py-2 text-sm font-medium" style={{borderRadius:'3rem'}}>Conta</button>
-        <button
-          onClick={onOpenReports}
-          className="pill-btn px-4 py-2 text-sm font-medium flex items-center gap-1.5"
-          style={{borderRadius:'3rem'}}
-        >
-          <span className="material-icons-outlined text-sm">auto_awesome</span>
-          Relatórios
-        </button>
-      </nav>
-
-      {/* Search Bar - Center — estilo pill glassmorphism */}
-      <div className="hidden md:block w-64 mx-4 relative" ref={searchRef}>
-        <div className="search-pill flex items-center px-4 py-2">
-          <span className="material-icons-outlined text-text-secondary mr-2 text-[20px]">search</span>
-          <input
-            type="text"
-            placeholder="Buscar..."
-            className="bg-transparent border-none focus:outline-none text-sm w-full text-text-main placeholder-text-secondary"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onFocus={() => searchQuery.length > 0 && setIsSearchOpen(true)}
-          />
-          {searchQuery && (
-            <button
-              onClick={() => { setSearchQuery(''); setIsSearchOpen(false); }}
-              className="text-text-secondary hover:text-text-main transition-colors"
-            >
-              <span className="material-icons-outlined text-sm">close</span>
-            </button>
-          )}
-        </div>
-
-        {/* Search Results Dropdown */}
-        {isSearchOpen && filteredResults.length > 0 && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-bg-surface rounded-2xl shadow-xl border border-border-main overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="p-2">
-              {filteredResults.map(result => (
-                <button key={result.id} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-bg-elevated transition-colors text-left">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 
-                    ${result.type === 'client' ? 'bg-info/10 text-info' :
-                      result.type === 'appointment' ? 'bg-primary-subtle text-primary' :
-                      'bg-bg-elevated text-text-secondary'}`}>
-                    <span className="material-icons-outlined text-sm">
-                      {result.type === 'client' ? 'person' : result.type === 'appointment' ? 'event' : 'description'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-text-main">{result.title}</p>
-                    <p className="text-xs text-text-secondary">{result.subtitle}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Botão CTA que surge ao lado da barra de pesquisa */}
-      {showProjectCta && (
-        <a
-          href="https://jimdevtattooquizz-com.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:inline-flex items-center justify-center px-5 py-2 text-sm font-semibold rounded-full transition-all bg-[#00E575] hover:bg-[#00c966] text-black shadow-xs cursor-pointer shrink-0 animate-in fade-in zoom-in-95 duration-200"
-        >
-          quero meu projeto completo
-        </a>
-      )}
-
-      <div className="flex items-center gap-2 md:gap-4">
-        {/* Versão mobile do botão CTA */}
-        {showProjectCta && (
-          <a
-            href="https://jimdevtattooquizz-com.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="md:hidden inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold rounded-full bg-[#00E575] hover:bg-[#00c966] text-black shadow-xs cursor-pointer shrink-0 animate-in fade-in duration-200"
-          >
-            quero meu projeto completo
-          </a>
-        )}
-
-        {/* Mobile Search Icon */}
-        <button className="md:hidden p-2 text-text-secondary hover:bg-bg-elevated rounded-full transition-colors">
-          <span className="material-icons-outlined">search</span>
-        </button>
-
-        {/* Notifications */}
-        <div className="relative">
-          <button 
-            ref={notificationRef}
-            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-            className={`p-2 rounded-full transition-colors relative ${isNotificationsOpen ? 'bg-bg-elevated text-primary' : 'text-text-secondary hover:bg-bg-elevated'}`}
-          >
-            <span className="material-icons-outlined">notifications</span>
-            {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-danger border-2 border-bg-surface rounded-full"></span>
+    <header className="sticky top-0 z-20 bg-bg-surface backdrop-blur-xl border-b border-border-main px-3.5 sm:px-4 lg:px-6 py-2.5 sm:py-3 flex items-center justify-between transition-colors duration-200 min-h-[56px]">
+      {/* Mobile Active Search Header Bar */}
+      {isMobileSearchOpen ? (
+        <div className="md:hidden flex items-center gap-2 w-full animate-in fade-in duration-200">
+          <div className="search-pill flex-1 flex items-center px-3 py-1.5 bg-bg-elevated rounded-full border border-border-main">
+            <span className="material-icons-outlined text-text-secondary mr-2 text-[18px]">search</span>
+            <input
+              type="text"
+              autoFocus
+              placeholder="Buscar agendamento, cliente..."
+              className="bg-transparent border-none focus:outline-none text-base w-full text-text-main placeholder-text-secondary"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => { setSearchQuery(''); }}
+                className="text-text-secondary hover:text-text-main p-1"
+                aria-label="Limpar busca"
+              >
+                <span className="material-icons-outlined text-sm">close</span>
+              </button>
             )}
+          </div>
+          <button
+            onClick={() => {
+              setIsMobileSearchOpen(false);
+              setSearchQuery('');
+            }}
+            className="px-2.5 py-1.5 text-xs font-semibold text-text-secondary hover:text-text-main shrink-0"
+          >
+            Fechar
           </button>
-
-          {isNotificationsOpen && (
-            <div 
-              ref={notificationDropdownRef}
-              className="absolute top-full right-0 sm:right-0 mt-2 w-[85vw] max-w-[320px] sm:max-w-none sm:w-96 bg-bg-surface rounded-2xl shadow-xl border border-border-main overflow-hidden animate-in fade-in zoom-in-95 duration-200 z-30"
+        </div>
+      ) : (
+        <>
+          {/* LEFT — Mobile: logo+título da tela | Desktop: logo+nome */}
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-[#FF5424] flex items-center justify-center text-white font-black text-lg shadow-sm shrink-0">B</div>
+            {/* Desktop: full brand name */}
+            <span className="hidden lg:block font-bold text-xl tracking-tight text-text-main">Barduka</span>
+            {/* Mobile: active screen title */}
+            <span className="lg:hidden font-bold text-base sm:text-lg tracking-tight text-text-main truncate max-w-[120px] xs:max-w-[160px] sm:max-w-none">
+              {screenTitles[activeScreen] || 'Barduka'}
+            </span>
+          </div>
+          
+          <nav className="hidden xl:flex items-center gap-1 pill-glass px-1.5 py-1">
+            <button
+              className="px-5 py-2 text-sm font-semibold rounded-full transition-all bg-[#FF5424] text-white shadow-xs"
             >
+              Visão Geral
+            </button>
+            <button className="pill-btn px-4 py-2 text-sm font-medium" style={{borderRadius:'3rem'}}>Conta</button>
+            <button
+              onClick={onOpenReports}
+              className="pill-btn px-4 py-2 text-sm font-medium flex items-center gap-1.5"
+              style={{borderRadius:'3rem'}}
+            >
+              <span className="material-icons-outlined text-sm">auto_awesome</span>
+              Relatórios
+            </button>
+          </nav>
+
+          {/* Search Bar - Center — estilo pill glassmorphism */}
+          <div className="hidden md:block w-64 mx-4 relative" ref={searchRef}>
+            <div className="search-pill flex items-center px-4 py-2">
+              <span className="material-icons-outlined text-text-secondary mr-2 text-[20px]">search</span>
+              <input
+                type="text"
+                placeholder="Buscar..."
+                className="bg-transparent border-none focus:outline-none text-base md:text-sm w-full text-text-main placeholder-text-secondary"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onFocus={() => searchQuery.length > 0 && setIsSearchOpen(true)}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => { setSearchQuery(''); setIsSearchOpen(false); }}
+                  className="text-text-secondary hover:text-text-main transition-colors"
+                >
+                  <span className="material-icons-outlined text-sm">close</span>
+                </button>
+              )}
+            </div>
+
+            {/* Search Results Dropdown */}
+            {isSearchOpen && filteredResults.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-bg-surface rounded-2xl shadow-xl border border-border-main overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                <div className="p-2">
+                  {filteredResults.map(result => (
+                    <button key={result.id} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-bg-elevated transition-colors text-left">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 
+                        ${result.type === 'client' ? 'bg-info/10 text-info' :
+                          result.type === 'appointment' ? 'bg-primary-subtle text-primary' :
+                          'bg-bg-elevated text-text-secondary'}`}>
+                        <span className="material-icons-outlined text-sm">
+                          {result.type === 'client' ? 'person' : result.type === 'appointment' ? 'event' : 'description'}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-text-main">{result.title}</p>
+                        <p className="text-xs text-text-secondary">{result.subtitle}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Botão CTA que surge ao lado da barra de pesquisa no Desktop */}
+          {showProjectCta && (
+            <a
+              href="https://jimdevtattooquizz-com.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center justify-center px-4 lg:px-5 py-2 text-xs lg:text-sm font-semibold rounded-full transition-all bg-[#00E575] hover:bg-[#00c966] text-black shadow-xs cursor-pointer shrink-0 animate-in fade-in zoom-in-95 duration-200"
+            >
+              quero meu projeto completo
+            </a>
+          )}
+
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            {/* Versão mobile compacta do botão CTA */}
+            {showProjectCta && (
+              <a
+                href="https://jimdevtattooquizz-com.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="md:hidden inline-flex items-center justify-center px-2 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-full bg-[#00E575] hover:bg-[#00c966] text-black shadow-xs cursor-pointer shrink-0 animate-in fade-in duration-200"
+              >
+                <span className="hidden xs:inline">Projeto Completo</span>
+                <span className="xs:hidden">Projeto</span>
+              </a>
+            )}
+
+            {/* Mobile Search Icon */}
+            <button 
+              onClick={() => setIsMobileSearchOpen(true)}
+              aria-label="Pesquisar"
+              className="md:hidden p-1.5 sm:p-2 text-text-secondary hover:bg-bg-elevated rounded-full transition-colors"
+            >
+              <span className="material-icons-outlined text-[20px]">search</span>
+            </button>
+
+            {/* Notifications */}
+            <div className="relative">
+              <button 
+                ref={notificationRef}
+                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                className={`p-1.5 sm:p-2 rounded-full transition-colors relative ${isNotificationsOpen ? 'bg-bg-elevated text-primary' : 'text-text-secondary hover:bg-bg-elevated'}`}
+              >
+                <span className="material-icons-outlined text-[20px]">notifications</span>
+                {unreadCount > 0 && (
+                  <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-danger border-2 border-bg-surface rounded-full"></span>
+                )}
+              </button>
+
+              {isNotificationsOpen && (
+                <div 
+                  ref={notificationDropdownRef}
+                  className="fixed sm:absolute top-14 sm:top-full right-2 sm:right-0 mt-2 w-[calc(100vw-1rem)] max-w-[340px] sm:w-96 bg-bg-surface rounded-2xl shadow-2xl border border-border-main overflow-hidden animate-in fade-in zoom-in-95 duration-200 z-50"
+                >
               <div className="p-4 border-b border-border-main flex justify-between items-center">
                 <h3 className="font-bold text-text-main">Notificações</h3>
                 {notifications.length > 0 && (
@@ -408,6 +449,8 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       </div>
-    </header>
-  );
+    </>
+  )}
+</header>
+);
 };

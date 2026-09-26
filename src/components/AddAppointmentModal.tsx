@@ -70,64 +70,64 @@ export const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({ isOpen
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 p-4 overflow-y-auto">
-      <div className="bg-bg-surface w-full max-w-lg rounded-3xl shadow-xl border border-border-main p-6 animate-in zoom-in-95 duration-200 my-auto max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-text-main">Novo Agendamento</h2>
-          <button onClick={onClose} className="text-text-secondary hover:text-text-main transition-colors">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-bg-surface w-full max-w-lg rounded-2xl sm:rounded-3xl shadow-2xl border border-border-main p-4 sm:p-6 animate-in zoom-in-95 duration-200 my-auto max-h-[92dvh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-bold text-text-main">Novo Agendamento</h2>
+          <button onClick={onClose} className="text-text-secondary hover:text-text-main transition-colors p-1 rounded-lg">
             <span className="material-icons-outlined">close</span>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:gap-4">
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">Nome do Cliente *</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Nome do Cliente *</label>
             <input 
               type="text" 
               required
               value={clientName}
               onChange={e => setClientName(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
               placeholder="Ex: João Silva"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">E-mail</label>
+              <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">E-mail</label>
               <input 
                 type="email" 
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
                 placeholder="joao@gmail.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">Telefone</label>
+              <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Telefone</label>
               <input 
                 type="tel" 
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
-                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
                 placeholder="(11) 99999-9999"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">Data *</label>
+              <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Data *</label>
               <input 
                 type="date" 
                 required
                 value={date}
                 onChange={e => setDate(e.target.value)}
-                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">Horário *</label>
+              <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Horário *</label>
               <input 
                 type="time" 
                 required
@@ -139,12 +139,12 @@ export const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({ isOpen
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">Serviço *</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Serviço *</label>
             <select 
               required
               value={service}
               onChange={e => setService(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
             >
               <option value="" disabled>Selecione um serviço</option>
               {dbServices.map(s => (
@@ -154,11 +154,11 @@ export const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({ isOpen
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">Parte do Corpo</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Parte do Corpo</label>
             <select 
               value={localCorpo}
               onChange={e => setLocalCorpo(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
             >
               <option value="Antebraço Direito">Antebraço Direito</option>
               <option value="Antebraço Esquerdo">Antebraço Esquerdo</option>
@@ -177,34 +177,34 @@ export const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({ isOpen
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">Link da Imagem de Referência (URL)</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Link da Imagem de Referência (URL)</label>
             <input 
               type="url" 
               value={imageUrl}
               onChange={e => setImageUrl(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
               placeholder="https://exemplo.com/imagem-referencia.jpg"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">Observações do Quiz / Arte</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Observações do Quiz / Arte</label>
             <textarea 
               rows={2}
               value={observacoes}
               onChange={e => setObservacoes(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main resize-none"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main resize-none text-base sm:text-sm"
               placeholder="Ex: Tatuagem no antebraço direito, estilo aquarela..."
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">Status</label>
+              <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Status</label>
               <select 
                 value={status}
                 onChange={e => setStatus(e.target.value as any)}
-                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
               >
                 <option value="pendente">Pendente</option>
                 <option value="confirmado">Confirmado</option>
@@ -213,11 +213,11 @@ export const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({ isOpen
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">Urgência</label>
+              <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Urgência</label>
               <select 
                 value={urgency}
                 onChange={e => setUrgency(e.target.value as any)}
-                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+                className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
               >
                 <option value="low">Baixa</option>
                 <option value="medium">Média</option>
@@ -228,7 +228,7 @@ export const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({ isOpen
 
           <button 
             type="submit" 
-            className="w-full mt-4 bg-primary hover:bg-primary-hover text-primary-text font-bold py-3 px-4 rounded-xl transition-colors shadow-sm shadow-primary/20"
+            className="w-full mt-2 sm:mt-4 bg-primary hover:bg-primary-hover text-primary-text font-bold py-3.5 px-4 rounded-xl transition-all active:scale-[0.99] shadow-md shadow-primary/20 text-sm sm:text-base"
           >
             Adicionar Agendamento
           </button>

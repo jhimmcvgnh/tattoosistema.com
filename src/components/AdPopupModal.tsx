@@ -44,36 +44,36 @@ export const AdPopupModal: React.FC<AdPopupModalProps> = ({
 
           {/* Texto do Anúncio */}
           <p className="text-white text-sm sm:text-base leading-relaxed font-normal max-w-md mb-7 px-1 text-center select-none">
-            Gostou da experiencia? quer melhorias? um design totalmente novo e personalizado e melhorado? clica no botão abaixo, responda o quiz necessario que não dura nada e ganhe um presente no final por responder!!
+            Gostou da experiência? Quer melhorias? Um design totalmente novo, personalizado e melhorado? Clique no botão abaixo, responda o quiz necessário que não dura nada e ganhe um presente no final por responder!
           </p>
 
           {/* Linha de Ação: Wand + Botão CTA + Gift */}
-          <div className="flex items-center justify-center gap-3 w-full max-w-md">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 w-full max-w-md">
             <button
               type="button"
               onClick={onCtaClick}
               title="Novidades e melhorias"
-              className="w-12 h-12 rounded-full bg-[#18191d] hover:bg-[#24262d] border border-white/10 flex items-center justify-center text-neutral-300 hover:text-white transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#18191d] hover:bg-[#24262d] border border-white/10 flex items-center justify-center text-neutral-300 hover:text-white transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
             >
-              <Wand2 className="size-5" />
+              <Wand2 className="size-4 sm:size-5" />
             </button>
 
             <button
               type="button"
               onClick={onCtaClick}
-              className="flex-1 py-3.5 px-4 sm:px-6 rounded-full bg-[#00E575] hover:bg-[#00c966] text-black font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,229,117,0.5)] transition-all transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              className="flex-1 py-3 sm:py-3.5 px-2.5 sm:px-6 rounded-full bg-[#00E575] hover:bg-[#00c966] text-black font-black text-[11px] sm:text-xs md:text-sm tracking-wide sm:tracking-wider uppercase flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_25px_rgba(0,229,117,0.5)] transition-all transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
-              <span>QUERO MEU PROJETO COMPLETO</span>
-              <ArrowRight className="size-4 stroke-[3]" />
+              <span className="truncate">QUERO MEU PROJETO</span>
+              <ArrowRight className="size-3.5 sm:size-4 stroke-[3] shrink-0" />
             </button>
 
             <button
               type="button"
               onClick={onCtaClick}
               title="Ganhe um presente especial"
-              className="w-12 h-12 rounded-full bg-[#18191d] hover:bg-[#24262d] border border-white/10 flex items-center justify-center text-neutral-300 hover:text-white transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#18191d] hover:bg-[#24262d] border border-white/10 flex items-center justify-center text-neutral-300 hover:text-white transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
             >
-              <Gift className="size-5" />
+              <Gift className="size-4 sm:size-5" />
             </button>
           </div>
         </div>

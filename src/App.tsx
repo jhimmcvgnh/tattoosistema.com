@@ -61,7 +61,7 @@ export default function App() {
   const [isAddAccountModalOpen, setIsAddAccountModalOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  // Hook do Anúncio Pop-up (3 min inicial, 1:30 min recorrente)
+  // Hook do Anúncio Pop-up (55s inicial, 55s recorrente)
   const { isAdOpen, showNavbarCta, handleClose: handleCloseAd, handleCta: handleCtaAd } = useAdPopup();
   
   // Period filtering state
@@ -170,15 +170,15 @@ export default function App() {
             closeMobileSidebar={() => setIsMobileSidebarOpen(false)}
             handleLogoutProp={handleLogout}
           />
-          <main className="flex-1 overflow-y-auto p-4 pb-24 lg:pb-10 lg:p-10 hide-scrollbar flex flex-col w-full">
+          <main className="flex-1 overflow-y-auto p-3.5 sm:p-4 pb-28 lg:pb-10 lg:p-10 hide-scrollbar flex flex-col w-full max-w-full overflow-x-hidden">
           {activeScreen === 'dashboard' && (
             <>
               {/* Top Greeting */}
-              <div className="mb-4 lg:mb-6">
-                <h1 className="text-2xl lg:text-3xl font-bold mb-1 text-text-main">
+              <div className="mb-3 sm:mb-4 lg:mb-6">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-0.5 text-text-main">
                   Bom dia, {currentUser?.name?.split(' ')[0] || 'Usuário'}
                 </h1>
-                <p className="text-sm text-text-secondary hidden sm:block">
+                <p className="text-xs sm:text-sm text-text-secondary hidden sm:block">
                   Acompanhe métricas, faturamento e fluxo de agendamentos em tempo real.
                 </p>
               </div>
@@ -196,18 +196,18 @@ export default function App() {
                 totalRevenue={revenue}
               />
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
-                <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                <div className="flex flex-col gap-3 sm:gap-4 lg:gap-6">
                   {/* Total Revenue Card */}
-                  <div className="glass-card p-6 rounded-3xl border border-border-main shadow-xs relative overflow-hidden group">
-                    <div className="flex justify-between items-start mb-6">
+                  <div className="glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-border-main shadow-xs relative overflow-hidden group">
+                    <div className="flex justify-between items-start mb-4 sm:mb-6">
                       <div>
-                        <p className="text-text-secondary mb-1 text-sm font-medium">Total Faturado</p>
-                        <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3 text-text-main">
+                        <p className="text-text-secondary mb-1 text-xs sm:text-sm font-medium">Total Faturado</p>
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2 sm:mb-3 text-text-main">
                           R$ {revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </h2>
-                        <div className="flex items-center gap-2">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
+                        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-bold ${
                             revenueTrend === 'up' 
                               ? 'bg-[#DCFCE7] text-[#16A34A] dark:bg-emerald-950/60 dark:text-emerald-400' 
                               : 'bg-[#FEE2E2] text-[#DC2626] dark:bg-rose-950/60 dark:text-rose-400'
@@ -217,13 +217,13 @@ export default function App() {
                             </span> 
                             {Math.abs(revenueGrowth)}%
                           </span>
-                          <span className="text-xs text-text-secondary font-medium">
+                          <span className="text-[11px] sm:text-xs text-text-secondary font-medium">
                             {comparisonLabel}
                           </span>
                         </div>
                       </div>
-                      <div className="p-2.5 bg-bg-elevated border border-border-main rounded-2xl text-text-secondary group-hover:text-primary transition-colors">
-                        <span className="material-icons-outlined text-xl">
+                      <div className="p-2 sm:p-2.5 bg-bg-elevated border border-border-main rounded-xl sm:rounded-2xl text-text-secondary group-hover:text-primary transition-colors shrink-0">
+                        <span className="material-icons-outlined text-lg sm:text-xl">
                           payments
                         </span>
                       </div>
@@ -256,7 +256,7 @@ export default function App() {
                   </div>
 
                   {/* Popular Services */}
-                  <div className="glass-card p-6 flex-1 flex flex-col rounded-3xl border border-border-main shadow-xs">
+                  <div className="glass-card p-4 sm:p-6 flex-1 flex flex-col rounded-2xl sm:rounded-3xl border border-border-main shadow-xs">
                      <div className="flex justify-between items-center mb-2">
                         <h3 className="font-semibold text-text-main">Serviços Mais Populares</h3>
                         <span className="text-xs text-text-secondary font-medium">{periodLabel}</span>

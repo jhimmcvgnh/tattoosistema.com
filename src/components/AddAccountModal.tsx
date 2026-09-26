@@ -27,75 +27,75 @@ export const AddAccountModal: React.FC<AddAccountModalProps> = ({ isOpen, onClos
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-bg-surface w-full max-w-md rounded-3xl shadow-xl border border-border-main p-6 animate-in zoom-in-95 duration-200">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-text-main">Adicionar Novo Funcionário / Usuário</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-bg-surface w-full max-w-md rounded-2xl sm:rounded-3xl shadow-2xl border border-border-main p-5 sm:p-6 animate-in zoom-in-95 duration-200 my-auto max-h-[92dvh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-5 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-bold text-text-main">Novo Funcionário / Usuário</h2>
           <button 
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center text-text-secondary hover:bg-bg-elevated transition-colors"
           >
-            <span className="material-icons-outlined text-sm">close</span>
+            <span className="material-icons-outlined text-base">close</span>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:gap-4">
           <div>
-            <label className="block text-sm font-medium text-text-main mb-1">Nome</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Nome</label>
             <input 
               type="text" 
               required
               placeholder="Ex: João Silva"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text-main mb-1">Email</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Email</label>
             <input 
               type="email" 
               required
               placeholder="Ex: joao.silva@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text-main mb-1">Número</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Número</label>
             <input 
               type="tel" 
               required
               placeholder="Ex: (11) 99999-9999"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text-main mb-1">Senha (Mínimo 6 caracteres)</label>
+            <label className="block text-xs font-semibold text-text-secondary uppercase mb-1">Senha (Mínimo 6 caracteres)</label>
             <input 
               type="password" 
               required
               placeholder="Digite a senha inicial"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main"
+              className="w-full p-3 bg-bg-base border border-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-text-main text-base sm:text-sm"
             />
           </div>
 
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-3 mt-2 sm:mt-4">
             <button 
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 rounded-xl border border-border-main text-text-main hover:bg-bg-elevated transition-colors font-medium"
+              className="flex-1 py-3 rounded-xl border border-border-main text-text-main hover:bg-bg-elevated transition-colors font-semibold text-sm"
             >
               Cancelar
             </button>
             <button 
               type="submit"
-              className="flex-1 py-3 bg-primary hover:bg-primary-hover text-primary-text rounded-xl font-bold transition-colors shadow-sm shadow-primary/20"
+              className="flex-1 py-3 bg-primary hover:bg-primary-hover text-primary-text rounded-xl font-bold transition-all active:scale-[0.99] shadow-sm shadow-primary/20 text-sm"
             >
               Cadastrar
             </button>
